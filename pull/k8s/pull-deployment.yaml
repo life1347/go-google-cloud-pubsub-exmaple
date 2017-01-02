@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    service: pubsub-pull-sub
+  name: pubsub-pull-sub
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: pubsub-pull-sub
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        service: pubsub-pull-sub
+    spec:
+      containers:
+      - name: pubsub-pull-sub
+        image: asia.gcr.io/<google project name>/pubsub-pull-subscription:<image tag>
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: GOOGLE_CLOUD_PROJECT
+          value: <google project name>
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /crt.json
+        ports:
+        - containerPort: 443
+          protocol: TCP
+      restartPolicy: Always

@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    service: pubsub-push-sub
+  name: pubsub-push-sub
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: pubsub-push-sub
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        service: pubsub-push-sub
+    spec:
+      containers:
+      - name: pubsub-push-sub
+        image: asia.gcr.io/<google project name>/pubsub-push-subscription:<image tag>
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 443
+          protocol: TCP
+      restartPolicy: Always

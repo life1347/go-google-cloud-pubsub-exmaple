@@ -1,3 +1,5 @@
 certificate.crt
 crt.json
 private.key
+pullSubscription
+pushSubscription
